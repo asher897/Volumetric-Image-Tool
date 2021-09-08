@@ -10,14 +10,11 @@ int main(int argc, char *argv[]){
     vol -> readImages(fileSeq);
 
     std::ifstream infile(fileSeq + ".data");
-    int numImages;
+    int numImages = 0;
     infile >> numImages;
     infile >> numImages;
     infile >> numImages;
     infile.close();
-
-    std::cout << "Number of images: " << numImages << std::endl;
-    std::cout << "Number of bytes required: " << vol -> volImageSize() << std::endl;
 
     if(argc > 2){
 
@@ -30,6 +27,10 @@ int main(int argc, char *argv[]){
 
             int i = std::stoi(arg1);
             int j = std::stoi(arg2);
+            if( i > numImages || j > numImages ) {
+                std::cerr << "The slices specified are too high.";
+                return 0;
+            }
 
             vol -> diffmap(i, j, outputFile);
             std::cout << "Calculated difference map using slices " << i << " and " << j << " and wrote output to file " << outputFile <<"." << std::endl;
@@ -39,11 +40,18 @@ int main(int argc, char *argv[]){
             std::string outputFile(argv[4]);
 
             int i = std::stoi(arg1);
+            if( i > numImages ) {
+                std::cerr << "The slice specified are too high.";
+                return 0;
+            }
 
             vol -> extract(i, outputFile);
             std::cout << "Performed extract operation using slice " << i << " and wrote output to file " << outputFile <<"." << std::endl;
 
     }
+
+    std::cout << "Number of images: " << numImages << std::endl;
+    std::cout << "Number of bytes required: " << vol -> volImageSize() << std::endl;
     
 
 
