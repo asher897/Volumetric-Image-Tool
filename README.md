@@ -28,7 +28,7 @@ The makefile can be called with the "make" command line instruction in the linux
 
 # Running the program
 Once compiled the program can be run in various ways:<br>
-`./volimage &ltimage base&gt [-d i j output_file_name] [-x i output_file_name]`
+`./volimage <image base> [-d i j output_file_name] [-x i output_file_name]`
 
 ### -d i j output_file_name
 This will compute a difference map between image slices i and j and writes it out to a file with file name equal to output_file_name.
