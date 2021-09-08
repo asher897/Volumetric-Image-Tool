@@ -34,6 +34,8 @@ class VolImage
 
         double getHeight();
 
+        double getWidth();
+
 };
 
 #endif
