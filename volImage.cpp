@@ -17,7 +17,7 @@ VolImage::~VolImage(){
     }
 };
 
-bool VolImage::readImages(std::string baseName){
+bool VolImage::readImages(std::string &baseName){
     std::ifstream infile(baseName + ".data");
 
     if(!infile){
@@ -27,6 +27,8 @@ bool VolImage::readImages(std::string baseName){
     int numImages;
     infile >> width >> std::ws >> height >> std::ws >> numImages;
     infile.close();
+
+    std::cout << "width: " << width << " height: " << height << std::endl;
 
 
 
@@ -46,7 +48,7 @@ bool VolImage::readImages(std::string baseName){
     
 }
 
-void VolImage::diffmap(int sliceI, int sliceJ, std::string output_prefix){
+void VolImage::diffmap(int &sliceI, int &sliceJ, std::string &output_prefix){
     std::fstream outFile(output_prefix + ".raw", std::ios::out | std::ios::binary);
 
     for(int row = 0; row < height; ++row){
@@ -62,7 +64,7 @@ void VolImage::diffmap(int sliceI, int sliceJ, std::string output_prefix){
 }
 
 
-void VolImage::extract(int sliceId, std::string output_prefix){
+void VolImage::extract(int &sliceId, std::string &output_prefix){
     std::fstream outFile(output_prefix + ".raw", std::ios::out | std::ios::binary);
 
     std::ofstream dataFile(output_prefix + ".data");
@@ -70,12 +72,8 @@ void VolImage::extract(int sliceId, std::string output_prefix){
     dataFile.close();
         
         for(int i = 0; i < height; i++){
-            
-            for(int j = 0; j < width; j++){
-                
-                outFile << slices[sliceId][i][j];
-                
-            }
+
+            outFile.write(reinterpret_cast<char *>(slices[sliceId][i]), width);
             
         }
 
@@ -85,4 +83,21 @@ void VolImage::extract(int sliceId, std::string output_prefix){
 
 int VolImage::volImageSize(void){
     return slices.size()*height*width + (slices.size()*height*8) + slices.size()*8;
+}
+
+void VolImage::extractNew(int &rowId, std::string &output_prefix) {
+    std::ofstream output_file(output_prefix + ".raw", std::ios::out | std::ios::binary);
+
+    for( int image = 0; image < slices.size(); ++image ) {
+
+        output_file.write(reinterpret_cast<char *>(slices[image][rowId]), width);
+
+    }
+
+
+    output_file.close();
+}
+
+double VolImage::getHeight() {
+    return height;
 }
