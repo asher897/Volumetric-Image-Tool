@@ -48,14 +48,25 @@ int main(int argc, char *argv[]){
             vol -> extract(i, outputFile);
             std::cout << "Performed extract operation using slice " << i << " and wrote output to file " << outputFile <<"." << std::endl;
 
+        } else if (op.compare("-g") == 0) {
+            std::string arg1(argv[3]);
+            std::string outputFile(argv[4]);
+
+            int i = std::stoi(arg1);
+            if ( i > vol -> getHeight()) {
+                std::cerr << "Row does not exist, please choose a row number between 1 and " << ( vol -> getHeight()) << std ::endl;
+                return 0;
+            }
+            vol -> extractNew(i, outputFile);
+
+            std::cout << "Extracted an image along row " << i << " of the volume across all slices and wrote this to " << outputFile <<"." << std::endl;
+
+        }
+
     }
 
     std::cout << "Number of images: " << numImages << std::endl;
     std::cout << "Number of bytes required: " << vol -> volImageSize() << std::endl;
-    
-
-
-    }
 
     delete vol;
 }
